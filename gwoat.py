@@ -94,7 +94,7 @@ class Index():
           <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <div id="img">
         <h2>Processing file......</h2>
-        make take up to a minute
+        may take up to a minute
         <p id="newfile" hidden>{0}</p>
         </div>
         </html>
