@@ -77,7 +77,7 @@ conf = {
 },
 
 'global': {
-        'server.socket_host': '127.0.0.1',
+        'server.socket_host': '0.0.0.0',
         'server.socket_port': int(os.environ.get('PORT', 8080)),
         'error_page.404': error_page_404
     },
