@@ -47,27 +47,28 @@ def draw_on_faces(filepath): #path to image
 
 class Index():
     @cherrypy.expose
-    def index(self, name, pic):
-
-        if not name:
+    def index(self):
             return open('index.html','r').read()
 
-        else:
-            print(name)
-            data = pic.file.read()
-            filename = pic.filename
-            type = pic.content_type
+    @cherrypy.expose
+    def process(self, pic):
+        data = pic.file.read()
+        filename = pic.filename
+        type = pic.content_type
 
-            with open(filename, 'wb') as file:
-                file.write(data)
+        with open(filename, 'wb') as file:
+            file.write(data)
 
-            new_file = draw_on_faces(filename)
+        new_file = draw_on_faces(filename)
 
-            return("""<html>
+        return("""<html>
 
-            <img src="static/{0}">
+        <img src="static/{0}">
 
-            </html>""".format(new_file) )
+        </html>""".format(new_file) )
+
+def error_page_404(status, message, traceback, version):
+    return "404 Error!"
 
 conf = {
 '/': {
@@ -76,8 +77,9 @@ conf = {
 },
 
 'global': {
-        'server.socket_host': '0.0.0.0',
+        'server.socket_host': '127.0.0.1',
         'server.socket_port': int(os.environ.get('PORT', 8080)),
+        'error_page.404': error_page_404
     },
 
 '/static': {
