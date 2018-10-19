@@ -5,9 +5,9 @@ import cherrypy
 
 DEBUG = False
 
-PHOTO_RESIZE_X = 920 #width of resized photos
-PHOTO_RESIZE_Y = 480
-GOAT_SCALE_FACTOR = 1.5 #how much to scale goat photo
+GOAT_SCALE_FACTOR = 3 #how much to scale goat photo
+GOAT_X_OFFSET = .11
+GOAT_Y_OFFSET = .1
 
 def draw_on_faces(filepath): #path to image
 
@@ -16,7 +16,25 @@ def draw_on_faces(filepath): #path to image
     file = os.path.splitext(file)[0] #get filename without extension
     img = cv2.imread(filepath) #read image
 
-    resized_img = cv2.resize(img, (PHOTO_RESIZE_X, PHOTO_RESIZE_Y)) #scale down photo. Make dynamic rescaling later
+    y_size, x_size, channels = img.shape
+
+
+    print ("X size {}  Y size: {} Channels: {}".format(x_size, y_size, channels))
+
+    photo_resize_x = x_size
+    photo_resize_y = y_size
+
+    while (photo_resize_x > 1920 or photo_resize_y > 1080):
+        photo_resize_x = photo_resize_x//2
+        photo_resize_y = photo_resize_y//2
+
+    x_offset = int(photo_resize_x*GOAT_X_OFFSET)
+    y_offset = int(photo_resize_y*GOAT_Y_OFFSET)
+
+    print("X off: {}  y off: {} x_resize: {} y_resize: {}".format
+    (x_offset, y_offset, photo_resize_x, photo_resize_y))
+
+    resized_img = cv2.resize(img, (photo_resize_x, photo_resize_y))
     gray_img = cv2.cvtColor(resized_img, cv2.COLOR_BGR2GRAY) #get grayscale image
 
     img_copy = gray_img.copy()
@@ -33,11 +51,11 @@ def draw_on_faces(filepath): #path to image
         goat_img = cv2.imread("static/goats/" + str(num) + '.jpg')
         #cv2.rectangle(resized_img, (x, y), (x+w, y+h), (0, 255, 0), thickness=2)
         resized_goat = cv2.resize(goat_img, (w_scaled,h_scaled)) #scale goat picture to face
-        for a in range(0, PHOTO_RESIZE_X): #loop over every pixel in the photo
-            for b in range(0, PHOTO_RESIZE_Y):
-                if (a > x and a < x+w_scaled and (b > y and b < y + h_scaled)): #if current pixel is within the boundaries of the face
-                    goat_a = x - a #get the corresponding pixel on goat photo
-                    goat_b = y - b
+        for a in range(0, photo_resize_x): #loop over every pixel in the photo
+            for b in range(0, photo_resize_y):
+                if (a > x - x_offset and a < x+w_scaled - x_offset and (b > y - y_offset and b < y + h_scaled - y_offset)): #if current pixel is within the boundaries of the face
+                    goat_a = x - x_offset - a #get the corresponding pixel on goat photo
+                    goat_b = y - y_offset - b
                     if (resized_goat[goat_b, goat_a][0] != 0 or resized_goat[goat_b, goat_a][1] != 0 or resized_goat[goat_b, goat_a][2] != 0):
                         resized_img[b,a] = resized_goat[goat_b, goat_a] #if pixel is not the darkest shade of black, overwrite with goat pixel.
 
@@ -80,7 +98,7 @@ conf = {
 },
 
 'global': {
-        'server.socket_host': '0.0.0.0',
+        'server.socket_host': '127.0.0.1',
         'server.socket_port': int(os.environ.get('PORT', 8080)),
         'error_page.404': error_page_404
 },
