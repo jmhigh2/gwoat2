@@ -3,6 +3,8 @@ import os
 import random
 import cherrypy
 
+DEBUG = False
+
 PHOTO_RESIZE_X = 920 #width of resized photos
 PHOTO_RESIZE_Y = 480
 GOAT_SCALE_FACTOR = 1.5 #how much to scale goat photo
@@ -70,6 +72,7 @@ class Index():
 def error_page_404(status, message, traceback, version):
     return "404 Error!"
 
+
 conf = {
 '/': {
             'tools.sessions.on': True,
@@ -80,7 +83,7 @@ conf = {
         'server.socket_host': '0.0.0.0',
         'server.socket_port': int(os.environ.get('PORT', 8080)),
         'error_page.404': error_page_404
-    },
+},
 
 '/static': {
  'tools.staticdir.on': True,
