@@ -9,6 +9,7 @@ GOAT_SCALE_FACTOR = 1.5 #how much to scale goat photo
 
 def draw_on_faces(filepath): #path to image
 
+    print(filepath) #debug
     file = os.path.basename(filepath) #get filename
     file = os.path.splitext(file)[0] #get filename without extension
     img = cv2.imread(filepath) #read image
