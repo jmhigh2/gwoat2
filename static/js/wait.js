@@ -1,4 +1,4 @@
-var wait = setInterval(getfile, 1000);
+var wait = setInterval(getfile, 10000);
 
 
 
