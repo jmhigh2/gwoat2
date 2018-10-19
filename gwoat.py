@@ -6,8 +6,8 @@ import cherrypy
 DEBUG = False
 
 GOAT_SCALE_FACTOR = 3 #how much to scale goat photo
-GOAT_X_OFFSET = .11
-GOAT_Y_OFFSET = .1
+#GOAT_X_OFFSET = .05 flat 50 pixels
+#GOAT_Y_OFFSET = .1
 
 def draw_on_faces(filepath): #path to image
 
@@ -28,8 +28,8 @@ def draw_on_faces(filepath): #path to image
         photo_resize_x = photo_resize_x//2
         photo_resize_y = photo_resize_y//2
 
-    x_offset = int(photo_resize_x*GOAT_X_OFFSET)
-    y_offset = int(photo_resize_y*GOAT_Y_OFFSET)
+    x_offset = 50 #int(photo_resize_x*GOAT_X_OFFSET)
+    y_offset = 50 #int(photo_resize_y*GOAT_Y_OFFSET)
 
     print("X off: {}  y off: {} x_resize: {} y_resize: {}".format
     (x_offset, y_offset, photo_resize_x, photo_resize_y))
@@ -98,7 +98,7 @@ conf = {
 },
 
 'global': {
-        'server.socket_host': '127.0.0.1',
+        'server.socket_host': '0.0.0.0',
         'server.socket_port': int(os.environ.get('PORT', 8080)),
         'error_page.404': error_page_404
 },
