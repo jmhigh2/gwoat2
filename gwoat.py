@@ -2,6 +2,7 @@ import cv2
 import os
 import random
 import cherrypy
+from threading import Thread
 
 DEBUG = False
 
@@ -11,7 +12,8 @@ GOAT_SCALE_FACTOR = 3 #how much to scale goat photo
 
 def draw_on_faces(filepath): #path to image
 
-    print(filepath) #debug
+
+    print("Filepath: ",filepath) #debug
     file = os.path.basename(filepath) #get filename
     file = os.path.splitext(file)[0] #get filename without extension
     img = cv2.imread(filepath) #read image
@@ -62,7 +64,7 @@ def draw_on_faces(filepath): #path to image
 
     new_file =  "new_" + file + '.jpg'
     cv2.imwrite("static/" + new_file, resized_img) #write modified image to media folder
-
+    print("process complete for", new_file)
     return new_file
 
 class Index():
@@ -76,16 +78,28 @@ class Index():
         filename = pic.filename
         type = pic.content_type
 
+
+
+        print("Received: ", filename)
+
         with open(filename, 'wb') as file:
             file.write(data)
 
-        new_file = draw_on_faces(filename)
+        thread = Thread(target = draw_on_faces, args=((filename,)))
+        thread.start()
+
+        filewoext = filename.split(".")[0]
 
         return("""<html>
-
-        <img src="static/{0}">
-
-        </html>""".format(new_file) )
+          <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <div id="img">
+        <h2>Processing file......</h2>
+        make take up to a minute
+        <p id="newfile" hidden>{0}</p>
+        </div>
+        </html>
+        <script src="static/js/wait.js"></script>
+        """.format("new_" + filewoext + ".jpg"))
 
 def error_page_404(status, message, traceback, version):
     return "404 Error!"
