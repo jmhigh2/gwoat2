@@ -3,12 +3,10 @@ import os
 import random
 import cherrypy
 from threading import Thread
+from jinja2 import Template
 
 DEBUG = False
-
 GOAT_SCALE_FACTOR = 3 #how much to scale goat photo
-#GOAT_X_OFFSET = .05 flat 50 pixels
-#GOAT_Y_OFFSET = .1
 
 def draw_on_faces(filepath): #path to image
 
@@ -30,8 +28,8 @@ def draw_on_faces(filepath): #path to image
         photo_resize_x = photo_resize_x//2
         photo_resize_y = photo_resize_y//2
 
-    x_offset = 50 #int(photo_resize_x*GOAT_X_OFFSET)
-    y_offset = 50 #int(photo_resize_y*GOAT_Y_OFFSET)
+    x_offset = 55 #pixels
+    y_offset = 60
 
     print("X off: {}  y off: {} x_resize: {} y_resize: {}".format
     (x_offset, y_offset, photo_resize_x, photo_resize_y))
@@ -78,8 +76,6 @@ class Index():
         filename = pic.filename
         type = pic.content_type
 
-
-
         print("Received: ", filename)
 
         with open(filename, 'wb') as file:
@@ -89,21 +85,20 @@ class Index():
         thread.start()
 
         filewoext = filename.split(".")[0]
+        new_file = "new_" + filewoext + ".jpg"
 
-        return("""<html>
-          <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        <div id="img">
-        <h2>Processing file......</h2>
-        may take up to a minute
-        <p id="newfile" hidden>{0}</p>
-        </div>
-        </html>
-        <script src="static/js/wait.js"></script>
-        """.format("new_" + filewoext + ".jpg"))
+        web_page = open('templates/process.html').read()
+        template = Template(web_page)
+        return template.render(filename=new_file)
+
 
 def error_page_404(status, message, traceback, version):
     return "404 Error!"
 
+if DEBUG:
+    address = '127.0.0.1'
+else:
+    address = '0.0.0.0'
 
 conf = {
 '/': {
@@ -112,7 +107,7 @@ conf = {
 },
 
 'global': {
-        'server.socket_host': '0.0.0.0',
+        'server.socket_host': address,
         'server.socket_port': int(os.environ.get('PORT', 8080)),
         'error_page.404': error_page_404
 },
