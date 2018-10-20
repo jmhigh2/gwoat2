@@ -95,10 +95,11 @@ class Index():
 def error_page_404(status, message, traceback, version):
     return "404 Error!"
 
-if DEBUG:
-    address = '127.0.0.1'
-else:
+if os.getcwd() == '/app':
     address = '0.0.0.0'
+else:
+    address = '127.0.0.1'
+
 
 conf = {
 '/': {
