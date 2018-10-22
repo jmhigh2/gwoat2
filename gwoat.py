@@ -53,10 +53,26 @@ def draw_on_faces(filepath): #path to image
         print (resized_goat.shape)
         goat_a = 0
         goat_b = 0
+
+        x_start = x - x_offset
+        x_end = x - x_offset + w_scaled - 1
+        y_start = y - y_offset
+        y_end = y - y_offset + h_scaled - 1
+
+        if (x_start < 0):
+            x_start = 0
+        if (y_start < 0):
+            y_start = 0
+
+        if (y_end > photo_resize_y):
+            y_end = photo_resize_y
+
+        if (x_end > photo_resize_x):
+            x_end = photo_resize_x
         #print("x range: {}-{}".format(x - x_offset, x - x_offset + w_scaled - 1))
         #print ("y range: {}-{}".format(y - y_offset,  y - y_offset + h_scaled - 1))
-        for a in range(x - x_offset, x - x_offset + w_scaled - 1):
-            for b in range(y - y_offset, y - y_offset + h_scaled - 1):
+        for a in range(x_start, x_end):
+            for b in range(y_start, y_end):
                 if (resized_goat[goat_b, goat_a][0] != 0 or resized_goat[goat_b, goat_a][1] != 0 or resized_goat[goat_b, goat_a][2] != 0):
                     resized_img[b,a] = resized_goat[goat_b, goat_a] #if pixel is not the darkest shade of black, overwrite with goat pixel.
                 goat_b += 1
