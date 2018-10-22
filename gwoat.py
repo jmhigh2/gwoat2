@@ -5,11 +5,9 @@ import cherrypy
 from threading import Thread
 from jinja2 import Template
 
-DEBUG = False
 GOAT_SCALE_FACTOR = 3 #how much to scale goat photo
 
 def draw_on_faces(filepath): #path to image
-
 
     print("Filepath: ",filepath) #debug
     file = os.path.basename(filepath) #get filename
@@ -17,7 +15,6 @@ def draw_on_faces(filepath): #path to image
     img = cv2.imread(filepath) #read image
 
     y_size, x_size, channels = img.shape
-
 
     print ("X size {}  Y size: {} Channels: {}".format(x_size, y_size, channels))
 
@@ -45,19 +42,26 @@ def draw_on_faces(filepath): #path to image
     print("Number of Faces: " + str(len(faces)))
 
     for (x, y, w, h) in faces: #loop over all faces
+        print("X, Y, W, H: {} {} {} {}".format(x, y, w, h))
         w_scaled = int(w * GOAT_SCALE_FACTOR) #opencv returns a rectangle around face. Going to need to enlarge goat picture to cover all of it
         h_scaled = int(h * GOAT_SCALE_FACTOR)
+        #print("goat w scaled:{}, h_scaled:{}".format(w_scaled, h_scaled))
         num =  random.randint(1, 7) #select random goat
         goat_img = cv2.imread("static/goats/" + str(num) + '.jpg')
         #cv2.rectangle(resized_img, (x, y), (x+w, y+h), (0, 255, 0), thickness=2)
         resized_goat = cv2.resize(goat_img, (w_scaled,h_scaled)) #scale goat picture to face
-        for a in range(0, photo_resize_x): #loop over every pixel in the photo
-            for b in range(0, photo_resize_y):
-                if (a > x - x_offset and a < x+w_scaled - x_offset and (b > y - y_offset and b < y + h_scaled - y_offset)): #if current pixel is within the boundaries of the face
-                    goat_a = x - x_offset - a #get the corresponding pixel on goat photo
-                    goat_b = y - y_offset - b
-                    if (resized_goat[goat_b, goat_a][0] != 0 or resized_goat[goat_b, goat_a][1] != 0 or resized_goat[goat_b, goat_a][2] != 0):
-                        resized_img[b,a] = resized_goat[goat_b, goat_a] #if pixel is not the darkest shade of black, overwrite with goat pixel.
+        print (resized_goat.shape)
+        goat_a = 0
+        goat_b = 0
+        #print("x range: {}-{}".format(x - x_offset, x - x_offset + w_scaled - 1))
+        #print ("y range: {}-{}".format(y - y_offset,  y - y_offset + h_scaled - 1))
+        for a in range(x - x_offset, x - x_offset + w_scaled - 1):
+            for b in range(y - y_offset, y - y_offset + h_scaled - 1):
+                if (resized_goat[goat_b, goat_a][0] != 0 or resized_goat[goat_b, goat_a][1] != 0 or resized_goat[goat_b, goat_a][2] != 0):
+                    resized_img[b,a] = resized_goat[goat_b, goat_a] #if pixel is not the darkest shade of black, overwrite with goat pixel.
+                goat_b += 1
+            goat_b = 0
+            goat_a += 1
 
 
     new_file =  "new_" + file + '.jpg'
@@ -95,9 +99,9 @@ class Index():
 def error_page_404(status, message, traceback, version):
     return "404 Error!"
 
-if os.getcwd() == '/app':
+if os.getcwd() == '/app': #heroku settings
     address = '0.0.0.0'
-else:
+else: #debug
     address = '127.0.0.1'
 
 
@@ -109,7 +113,7 @@ conf = {
 
 'global': {
         'server.socket_host': address,
-        'server.socket_port': int(os.environ.get('PORT', 8080)),
+        'server.socket_port': int(os.environ.get('PORT', 8000)),
         'error_page.404': error_page_404
 },
 

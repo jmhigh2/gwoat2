@@ -1,4 +1,4 @@
-var wait = setInterval(getfile, 10000);
+var wait = setInterval(getfile, 5000);
 
 
 
@@ -17,7 +17,7 @@ $.ajax(
      },
      success: function()
      {
-         $("#img").html("Done!")
+         $("#img").html("Done!<br>")
          $("#img").append("<img src=\"/static/"+waitfile + "\"></img>")
          clearInterval(wait);
      }
