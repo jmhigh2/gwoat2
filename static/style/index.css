@@ -1,0 +1,43 @@
+.content{
+  /* display:grid; */
+  text-align:center;
+  margin: auto;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  min-width:375px;
+  color: rgb(60, 60, 60);
+}
+.blue{
+  background-color:#a4d0ff;
+  height: calc(100vh);
+}
+.roboto700{
+  font-family: 'Roboto', sans-serif;
+  font-weight: 700;
+}
+.open_sans{
+  font-family: 'Open Sans', sans-serif;
+}
+.open_sans300{
+  font-family: 'Open Sans', sans-serif;
+  font-weight:300;
+}
+.paragraph{
+  margin-top: .5rem;
+  margin-bottom: .5rem;
+}
+.paragraph p{
+  margin:0px 0px; 
+  text-align:center;
+}
+.gwoat_form{
+  text-align:left;
+  border: 1px solid rgb(60, 60, 60);
+}
+.gwoat_form h4{
+  margin-top:15px;
+  text-align:center;
+}
+.gwoat_form p{
+  margin:15px 63px;
+}

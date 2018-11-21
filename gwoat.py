@@ -27,6 +27,7 @@ def draw_on_faces(filepath): #path to image
 
     x_offset = 55 #pixels
     y_offset = 60
+  
 
     print("X off: {}  y off: {} x_resize: {} y_resize: {}".format
     (x_offset, y_offset, photo_resize_x, photo_resize_y))
@@ -88,7 +89,7 @@ def draw_on_faces(filepath): #path to image
 class Index():
     @cherrypy.expose
     def index(self):
-            return open('index.html','r').read()
+            return open('templates/index.html','r').read()
 
     @cherrypy.expose
     def process(self, pic):
