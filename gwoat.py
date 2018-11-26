@@ -89,7 +89,7 @@ def draw_on_faces(filepath): #path to image
 class Index():
     @cherrypy.expose
     def index(self):
-            return open('templates/index.html','r').read()
+      return open('templates/index.html','r').read()
 
     @cherrypy.expose
     def process(self, pic):

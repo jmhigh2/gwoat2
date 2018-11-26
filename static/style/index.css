@@ -1,6 +1,6 @@
 .content{
   text-align:center;
-  margin: auto;
+  margin: auto auto;
   padding-top: 20px;
   padding-bottom: 20px;
   min-width:375px;
