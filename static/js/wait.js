@@ -1,8 +1,5 @@
 var wait = setInterval(getfile, 5000);
 
-
-
-
 function getfile(){
 
 var waitfile = $("#newfile").html();
@@ -17,8 +14,11 @@ $.ajax(
      },
      success: function()
      {
-         $("#img").html("Done!<br>")
-         $("#img").append("<img src=\"/static/"+waitfile + "\"></img>")
+        document.getElementById("target2").classList.remove('content');
+        document.getElementById("target2").classList.add('content2');
+
+         $("#img").html("")
+         $("#img").append("<img id='sally' src=\"/static/"+waitfile + "\"></img>")
          clearInterval(wait);
      }
   }
