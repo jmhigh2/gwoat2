@@ -6,6 +6,7 @@ from threading import Thread
 from jinja2 import Template
 
 GOAT_SCALE_FACTOR = 3 #how much to scale goat photo
+#text
 
 def draw_on_faces(filepath): #path to image
 
@@ -27,7 +28,7 @@ def draw_on_faces(filepath): #path to image
 
     x_offset = 55 #pixels
     y_offset = 60
-  
+
 
     print("X off: {}  y off: {} x_resize: {} y_resize: {}".format
     (x_offset, y_offset, photo_resize_x, photo_resize_y))
