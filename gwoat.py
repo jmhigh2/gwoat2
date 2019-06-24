@@ -6,7 +6,6 @@ from threading import Thread
 from jinja2 import Template
 
 GOAT_SCALE_FACTOR = 3 #how much to scale goat photo
-#text
 
 def draw_on_faces(filepath): #path to image
 
