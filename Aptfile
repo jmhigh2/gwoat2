@@ -1,8 +1,1 @@
-:repo:deb http://us.archive.ubuntu.com/ubuntu/ bionic multiverse
-:repo:deb http://us.archive.ubuntu.com/ubuntu/ bionic-updates multiverse
-:repo:deb http://us.archive.ubuntu.com/ubuntu/ bionic universe
-:repo:deb http://us.archive.ubuntu.com/ubuntu/ bionic-updates universe
-libsm6
-libxrender1
-libfontconfig1
-libice6
+python3-opencv
